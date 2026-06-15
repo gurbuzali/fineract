@@ -17,3 +17,7 @@ build
 AGENTS.md
 CLAUDE.md
 memory/
+
+# AURA / AI agent runtime directories
+.copilot/
+.github/copilot-instructions.md
