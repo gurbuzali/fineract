@@ -8,6 +8,7 @@ build
 *.iml
 
 .aura/
+.aura.backup/
 .beads/
 .claude/
 .codex/
