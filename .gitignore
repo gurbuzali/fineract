@@ -9,6 +9,7 @@ build
 
 .aura/
 .aura.backup/
+.scip/
 .beads/
 .claude/
 .codex/
