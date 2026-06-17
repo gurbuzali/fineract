@@ -117,8 +117,6 @@ public interface LoanReadPlatformService {
 
     Collection<LoanSchedulePeriodData> fetchWaiverInterestRepaymentData(Long loanId);
 
-    boolean isGuaranteeRequired(Long loanId);
-
     Date retrieveMinimumDateOfRepaymentTransaction(Long loanId);
 
     PaidInAdvanceData retrieveTotalPaidInAdvance(Long loanId);

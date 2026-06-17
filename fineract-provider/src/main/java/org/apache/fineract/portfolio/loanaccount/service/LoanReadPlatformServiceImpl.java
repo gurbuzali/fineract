@@ -1857,12 +1857,6 @@ public class LoanReadPlatformServiceImpl implements LoanReadPlatformService {
         }
     }
 
-    @Override
-    public boolean isGuaranteeRequired(final Long loanId) {
-        final String sql = "select pl.hold_guarantee_funds from m_loan ml inner join m_product_loan pl on pl.id = ml.product_id where ml.id=?";
-        return this.jdbcTemplate.queryForObject(sql, Boolean.class, loanId);
-    }
-
     private static final class LoanTransactionDerivedComponentMapper implements RowMapper<LoanTransactionData> {
 
         public String schema() {

@@ -69,13 +69,10 @@ import org.springframework.stereotype.Service;
 public class LoanReadPlatformServiceRoutingImpl implements LoanReadPlatformService {
 
     private final LoanReadPlatformServiceImpl legacy;
-    private final LoanGuaranteeReadService loanGuaranteeReadService;
 
     @Autowired
-    public LoanReadPlatformServiceRoutingImpl(final LoanReadPlatformServiceImpl legacy,
-            final LoanGuaranteeReadService loanGuaranteeReadService) {
+    public LoanReadPlatformServiceRoutingImpl(final LoanReadPlatformServiceImpl legacy) {
         this.legacy = legacy;
-        this.loanGuaranteeReadService = loanGuaranteeReadService;
     }
 
     @Override
@@ -245,13 +242,6 @@ public class LoanReadPlatformServiceRoutingImpl implements LoanReadPlatformServi
     @Override
     public Collection<LoanSchedulePeriodData> fetchWaiverInterestRepaymentData(final Long loanId) {
         return this.legacy.fetchWaiverInterestRepaymentData(loanId);
-    }
-
-    @Override
-    public boolean isGuaranteeRequired(final Long loanId) {
-        // strangler route-flip (slice-cutover): this slice is now served by the new
-        // LoanGuaranteeReadService implementation rather than the legacy read service.
-        return this.loanGuaranteeReadService.isGuaranteeRequired(loanId);
     }
 
     @Override

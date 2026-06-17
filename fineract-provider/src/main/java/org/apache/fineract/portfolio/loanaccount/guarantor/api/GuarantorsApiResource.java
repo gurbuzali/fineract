@@ -66,7 +66,7 @@ import org.apache.fineract.portfolio.loanaccount.guarantor.data.GuarantorData;
 import org.apache.fineract.portfolio.loanaccount.guarantor.domain.GuarantorType;
 import org.apache.fineract.portfolio.loanaccount.guarantor.service.GuarantorEnumerations;
 import org.apache.fineract.portfolio.loanaccount.guarantor.service.GuarantorReadPlatformService;
-import org.apache.fineract.portfolio.loanaccount.service.LoanReadPlatformService;
+import org.apache.fineract.portfolio.loanaccount.service.LoanGuaranteeReadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -95,7 +95,7 @@ public class GuarantorsApiResource {
     private final PortfolioCommandSourceWritePlatformService commandsSourceWritePlatformService;
     private final PlatformSecurityContext context;
     private final PortfolioAccountReadPlatformService portfolioAccountReadPlatformService;
-    private final LoanReadPlatformService loanReadPlatformService;
+    private final LoanGuaranteeReadService loanGuaranteeReadService;
     private final BulkImportWorkbookService bulkImportWorkbookService;
     private final BulkImportWorkbookPopulatorService bulkImportWorkbookPopulatorService;
 
@@ -106,7 +106,7 @@ public class GuarantorsApiResource {
             final PortfolioCommandSourceWritePlatformService commandsSourceWritePlatformService,
             final CodeValueReadPlatformService codeValueReadPlatformService,
             final PortfolioAccountReadPlatformService portfolioAccountReadPlatformService,
-            final LoanReadPlatformService loanReadPlatformService,
+            final LoanGuaranteeReadService loanGuaranteeReadService,
             final BulkImportWorkbookService bulkImportWorkbookService,
             final BulkImportWorkbookPopulatorService bulkImportWorkbookPopulatorService) {
         this.context = context;
@@ -116,7 +116,7 @@ public class GuarantorsApiResource {
         this.guarantorReadPlatformService = guarantorReadPlatformService;
         this.codeValueReadPlatformService = codeValueReadPlatformService;
         this.portfolioAccountReadPlatformService = portfolioAccountReadPlatformService;
-        this.loanReadPlatformService = loanReadPlatformService;
+        this.loanGuaranteeReadService = loanGuaranteeReadService;
         this.bulkImportWorkbookService=bulkImportWorkbookService;
         this.bulkImportWorkbookPopulatorService=bulkImportWorkbookPopulatorService;
     }
@@ -225,7 +225,7 @@ public class GuarantorsApiResource {
 
         PortfolioAccountDTO portfolioAccountDTO = new PortfolioAccountDTO(PortfolioAccountType.SAVINGS.getValue(), clientId, null);
         Collection<PortfolioAccountData> accountLinkingOptions = null;
-        if (this.loanReadPlatformService.isGuaranteeRequired(loanId)) {
+        if (this.loanGuaranteeReadService.isGuaranteeRequired(loanId)) {
             accountLinkingOptions = this.portfolioAccountReadPlatformService.retrieveAllForLookup(portfolioAccountDTO);
         }
         final GuarantorData guarantorData = GuarantorData.template(null, null, accountLinkingOptions);
