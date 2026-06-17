@@ -2442,7 +2442,7 @@ public class LoanWritePlatformServiceJpaRepositoryImpl implements LoanWritePlatf
                 chargeDefinition.getId(), periodNumber);
 
         Integer feeFrequency = chargeDefinition.feeFrequency();
-        final ScheduledDateGenerator scheduledDateGenerator = ScheduledDateGeneratorFactory.legacyDateGenerator();
+        final ScheduledDateGenerator scheduledDateGenerator = ScheduledDateGeneratorFactory.dateGenerator();
         Map<Integer, LocalDate> scheduleDates = new HashMap<>();
         final Long penaltyWaitPeriodValue = this.configurationDomainService.retrievePenaltyWaitPeriod();
         final Long penaltyPostingWaitPeriodValue = this.configurationDomainService.retrieveGraceOnPenaltyPostingPeriod();
