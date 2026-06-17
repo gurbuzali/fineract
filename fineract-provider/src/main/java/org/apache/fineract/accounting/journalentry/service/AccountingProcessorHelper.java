@@ -52,6 +52,7 @@ import org.apache.fineract.accounting.journalentry.domain.JournalEntryRepository
 import org.apache.fineract.accounting.journalentry.domain.JournalEntryType;
 import org.apache.fineract.accounting.journalentry.exception.JournalEntryInvalidException;
 import org.apache.fineract.accounting.journalentry.exception.JournalEntryInvalidException.GL_JOURNAL_ENTRY_INVALID_REASON;
+import org.apache.fineract.accounting.journalentry.service.acl.PortfolioTransactionPort;
 import org.apache.fineract.accounting.producttoaccountmapping.domain.PortfolioProductType;
 import org.apache.fineract.accounting.producttoaccountmapping.domain.ProductToGLAccountMapping;
 import org.apache.fineract.accounting.producttoaccountmapping.domain.ProductToGLAccountMappingRepository;
@@ -67,7 +68,6 @@ import org.apache.fineract.portfolio.client.domain.ClientTransaction;
 import org.apache.fineract.portfolio.client.domain.ClientTransactionRepositoryWrapper;
 import org.apache.fineract.portfolio.loanaccount.data.LoanTransactionEnumData;
 import org.apache.fineract.portfolio.loanaccount.domain.LoanTransaction;
-import org.apache.fineract.portfolio.loanaccount.domain.LoanTransactionRepository;
 import org.apache.fineract.portfolio.paymentdetail.domain.PaymentDetail;
 import org.apache.fineract.portfolio.savings.data.SavingsAccountTransactionEnumData;
 import org.apache.fineract.portfolio.savings.domain.SavingsAccountTransaction;
@@ -91,7 +91,7 @@ public class AccountingProcessorHelper {
     private final GLClosureRepository closureRepository;
     private final GLAccountRepositoryWrapper accountRepositoryWrapper;
     private final OfficeRepositoryWrapper officeRepositoryWrapper;
-    private final LoanTransactionRepository loanTransactionRepository;
+    private final PortfolioTransactionPort portfolioTransactionPort;
     private final ClientTransactionRepositoryWrapper clientTransactionRepository;
     private final SavingsAccountTransactionRepository savingsAccountTransactionRepository;
     private final AccountTransfersReadPlatformService accountTransfersReadPlatformService;
@@ -99,7 +99,7 @@ public class AccountingProcessorHelper {
     @Autowired
     public AccountingProcessorHelper(final JournalEntryRepository glJournalEntryRepository,
             final ProductToGLAccountMappingRepository accountMappingRepository, final GLClosureRepository closureRepository,
-            final OfficeRepositoryWrapper officeRepositoryWrapper, final LoanTransactionRepository loanTransactionRepository,
+            final OfficeRepositoryWrapper officeRepositoryWrapper, final PortfolioTransactionPort portfolioTransactionPort,
             final SavingsAccountTransactionRepository savingsAccountTransactionRepository,
             final FinancialActivityAccountRepositoryWrapper financialActivityAccountRepository,
             final AccountTransfersReadPlatformService accountTransfersReadPlatformService,
@@ -109,7 +109,7 @@ public class AccountingProcessorHelper {
         this.accountMappingRepository = accountMappingRepository;
         this.closureRepository = closureRepository;
         this.officeRepositoryWrapper = officeRepositoryWrapper;
-        this.loanTransactionRepository = loanTransactionRepository;
+        this.portfolioTransactionPort = portfolioTransactionPort;
         this.savingsAccountTransactionRepository = savingsAccountTransactionRepository;
         this.financialActivityAccountRepository = financialActivityAccountRepository;
         this.accountTransfersReadPlatformService = accountTransfersReadPlatformService;
@@ -774,7 +774,7 @@ public class AccountingProcessorHelper {
     }
 
     public LoanTransaction getLoanTransactionById(final long loanTransactionId) {
-        return this.loanTransactionRepository.findOne(loanTransactionId);
+        return this.portfolioTransactionPort.findLoanTransaction(loanTransactionId);
     }
 
     public SavingsAccountTransaction getSavingsTransactionById(final long savingsTransactionId) {
@@ -848,7 +848,7 @@ public class AccountingProcessorHelper {
         String modifiedTransactionId = transactionId;
         if (StringUtils.isNumeric(transactionId)) {
             long id = Long.parseLong(transactionId);
-            loanTransaction = this.loanTransactionRepository.findOne(id);
+            loanTransaction = this.portfolioTransactionPort.findLoanTransaction(id);
             modifiedTransactionId = LOAN_TRANSACTION_IDENTIFIER + transactionId;
         }
         final JournalEntry journalEntry = JournalEntry.createNew(office, paymentDetail, account, currencyCode, modifiedTransactionId,
@@ -898,7 +898,7 @@ public class AccountingProcessorHelper {
         String modifiedTransactionId = transactionId;
         if (StringUtils.isNumeric(transactionId)) {
             long id = Long.parseLong(transactionId);
-            loanTransaction = this.loanTransactionRepository.findOne(id);
+            loanTransaction = this.portfolioTransactionPort.findLoanTransaction(id);
             modifiedTransactionId = LOAN_TRANSACTION_IDENTIFIER + transactionId;
         }
         final JournalEntry journalEntry = JournalEntry.createNew(office, paymentDetail, account, currencyCode, modifiedTransactionId,
