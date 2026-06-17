@@ -19,28 +19,30 @@
 package org.apache.fineract.portfolio.loanaccount.loanschedule.domain.characterization;
 
 // Characterization test — pinned-behavior snapshot of OBSERVED output.
-//   target: fineract-provider/src/main/java/org/apache/fineract/portfolio/loanaccount/loanschedule/domain/DefaultScheduledDateGenerator.java
-//   run_id: 000-modernization-roadmap-bba-loan-schedule-generator-step-1
+//   target: fineract-provider/src/main/java/org/apache/fineract/portfolio/loanaccount/loanschedule/domain/ModernScheduledDateGenerator.java
+//   run_id: 000-modernization-roadmap-bba-loan-schedule-generator-step-7-legacy-retirement
 //   strategies: none (pure date arithmetic over fixed inputs; no clock/uuid/ordering/random/environment non-determinism present)
 //   pin-behavior: This test pins observed values, not intended values. A green test means "no observable change since generation"; it does NOT mean "the code is correct".
-// acceptance: AC-006 — edge-cases (strict superset of DefaultScheduledDateGeneratorCharacterizationTest); inspection-fallback (no branch coverage on this Gradle 2.10 build).
+// acceptance: AC-006 — edge-cases (strict superset of ModernScheduledDateGeneratorCharacterizationTest); inspection-fallback (no branch coverage on this Gradle 2.10 build). Carries the legacy DefaultScheduledDateGenerator edge golden-master onto the modern implementation at legacy-retirement.
 
 import static org.junit.Assert.assertEquals;
 
 import org.apache.fineract.portfolio.common.domain.PeriodFrequencyType;
-import org.apache.fineract.portfolio.loanaccount.loanschedule.domain.DefaultScheduledDateGenerator;
+import org.apache.fineract.portfolio.loanaccount.loanschedule.domain.ModernScheduledDateGenerator;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 
 /**
- * Edge-case golden-master extending {@code DefaultScheduledDateGeneratorCharacterizationTest} with boundary and
- * error-path inputs the happy-path set did not pin: the divide-by-zero error path on a zero {@code repaidEvery},
- * the unexercised {@code INVALID} enum branch, and the zero-interval / same-day boundaries. Pure unit (no
+ * Edge-case golden-master extending {@code ModernScheduledDateGeneratorCharacterizationTest} with the boundary and
+ * error-path inputs the happy-path set did not pin: the divide-by-zero error path on a zero {@code repaidEvery}, the
+ * unexercised {@code INVALID} enum branch, and the zero-interval / same-day boundaries. These assertions are identical
+ * to the retired {@code DefaultScheduledDateGeneratorEdgesCharacterizationTest} — the equality is the behavioral-
+ * equivalence evidence that the modern implementation preserves the legacy edge behavior. Pure unit (no
  * LoanApplicationTerms, no Spring, no DB). Categories: error-path, type-union-branch, boundary-input.
  */
-public class DefaultScheduledDateGeneratorEdgesCharacterizationTest {
+public class ModernScheduledDateGeneratorEdgesCharacterizationTest {
 
-    private final DefaultScheduledDateGenerator generator = new DefaultScheduledDateGenerator();
+    private final ModernScheduledDateGenerator generator = new ModernScheduledDateGenerator();
 
     // error-path: repaidEvery == 0 reaches `diff % repaidEvery` -> integer divide-by-zero.
     @Test(expected = ArithmeticException.class)

@@ -36,8 +36,8 @@ import org.junit.Test;
 
 /**
  * Golden-master pinning {@code ModernScheduledDateGenerator} — the branch-by-abstraction replacement implementation —
- * to the SAME observed values as the legacy {@code DefaultScheduledDateGenerator} (see
- * {@link DefaultScheduledDateGeneratorCharacterizationTest}). Identical assertions across the two implementations are
+ * to the SAME observed values as the legacy {@code DefaultScheduledDateGenerator} (see the retired
+ * {@code DefaultScheduledDateGeneratorCharacterizationTest}). Identical assertions across the two implementations are
  * the behavioral-equivalence evidence that gates the impl-flip: the new implementation produces no observable change on
  * the pure, collaborator-free date arithmetic — {@code getRepaymentPeriodDate(...)} and {@code isDateFallsInSchedule(...)},
  * including Joda-Time month-end / leap-day clamping. Pure unit (no LoanApplicationTerms, no Spring, no DB).

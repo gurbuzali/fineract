@@ -35,7 +35,7 @@ import org.joda.time.Weeks;
 import org.joda.time.Years;
 
 /**
- * Behavior-preserving replacement for {@link DefaultScheduledDateGenerator}.
+ * Behavior-preserving replacement for the retired {@code DefaultScheduledDateGenerator}.
  *
  * <p>
  * Introduced by the branch-by-abstraction transformation (run {@code 000-modernization-roadmap}, component

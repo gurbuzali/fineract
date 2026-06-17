@@ -23,18 +23,14 @@ package org.apache.fineract.portfolio.loanaccount.loanschedule.domain;
  *
  * <p>
  * Branch-by-abstraction seam (transformation run {@code 000-modernization-roadmap}, component
- * {@code bba-loan-schedule-generator}). Before this seam existed, five caller classes each hard-coded
- * {@code new DefaultScheduledDateGenerator()} inline — a direct, baked-in dependency on a concrete
- * implementation with no swap point. Routing every caller through this factory centralises the choice of
- * {@code ScheduledDateGenerator} implementation in one place so the implementation can be flipped (and the
- * legacy one retired) without touching the callers' surrounding logic.
- *
- * <p>
- * The two-method shape is intentional and transitional: {@link #legacyDateGenerator()} returns the legacy
- * implementation and exists only until every caller has been flipped; {@code dateGenerator()} (added in the
- * impl-flip step) returns the new implementation and is the durable survivor once the legacy one is retired.
+ * {@code bba-loan-schedule-generator}). Before this seam existed, five caller classes each hard-coded a
+ * {@code new}-instantiation of the concrete schedule-date generator inline — a direct, baked-in dependency with no
+ * swap point. Routing every caller through this factory centralised the choice of {@code ScheduledDateGenerator}
+ * implementation in one place; the transformation used that single point to flip every caller onto
+ * {@link ModernScheduledDateGenerator} and retire the legacy implementation. It remains the single, durable
+ * construction point for {@link ScheduledDateGenerator}.
  */
-// acceptance: AC-007 (Phase C / BBA abstraction-introduction) — the construction seam migrated callers route through.
+// acceptance: AC-007 (Phase C / BBA) — the durable construction seam every caller routes through.
 public final class ScheduledDateGeneratorFactory {
 
     private ScheduledDateGeneratorFactory() {
@@ -42,17 +38,8 @@ public final class ScheduledDateGeneratorFactory {
     }
 
     /**
-     * Returns the legacy {@link DefaultScheduledDateGenerator}. Transitional: callers are migrated here as pure
-     * indirection during abstraction-introduction, then flipped off it during impl-flip; removed at legacy-retirement.
-     */
-    public static ScheduledDateGenerator legacyDateGenerator() {
-        return new DefaultScheduledDateGenerator();
-    }
-
-    /**
-     * Returns the new {@link ModernScheduledDateGenerator}. Callers are flipped onto this one at a time during
-     * impl-flip; once every caller uses it and {@link #legacyDateGenerator()} is removed at legacy-retirement, this is
-     * the single durable construction point for {@link ScheduledDateGenerator}.
+     * Returns a {@link ScheduledDateGenerator} — the {@link ModernScheduledDateGenerator} implementation. This is the
+     * single construction point for the repayment-schedule date generator across all callers.
      */
     public static ScheduledDateGenerator dateGenerator() {
         return new ModernScheduledDateGenerator();
