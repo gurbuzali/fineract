@@ -54,8 +54,8 @@ import org.apache.fineract.portfolio.account.domain.StandingInstructionStatus;
 import org.apache.fineract.portfolio.account.domain.StandingInstructionType;
 import org.apache.fineract.portfolio.account.exception.StandingInstructionNotFoundException;
 import org.apache.fineract.portfolio.common.domain.PeriodFrequencyType;
-import org.apache.fineract.portfolio.loanaccount.loanschedule.domain.DefaultScheduledDateGenerator;
 import org.apache.fineract.portfolio.loanaccount.loanschedule.domain.ScheduledDateGenerator;
+import org.apache.fineract.portfolio.loanaccount.loanschedule.domain.ScheduledDateGeneratorFactory;
 import org.apache.fineract.portfolio.savings.domain.SavingsAccount;
 import org.apache.fineract.portfolio.savings.exception.InsufficientAccountBalanceException;
 import org.joda.time.LocalDate;
@@ -201,7 +201,7 @@ public class StandingInstructionWritePlatformServiceImpl implements StandingInst
             StandingInstructionType instructionType = data.instructionType();
             LocalDate transactionDate = new LocalDate();
             if (recurrenceType.isPeriodicRecurrence()) {
-                final ScheduledDateGenerator scheduledDateGenerator = new DefaultScheduledDateGenerator();
+                final ScheduledDateGenerator scheduledDateGenerator = ScheduledDateGeneratorFactory.legacyDateGenerator();
                 PeriodFrequencyType frequencyType = data.recurrenceFrequency();
                 LocalDate startDate = data.validFrom();
                 if (frequencyType.isMonthly()) {
