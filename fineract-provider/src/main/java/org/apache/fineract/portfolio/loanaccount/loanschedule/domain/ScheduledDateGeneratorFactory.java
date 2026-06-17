@@ -48,4 +48,13 @@ public final class ScheduledDateGeneratorFactory {
     public static ScheduledDateGenerator legacyDateGenerator() {
         return new DefaultScheduledDateGenerator();
     }
+
+    /**
+     * Returns the new {@link ModernScheduledDateGenerator}. Callers are flipped onto this one at a time during
+     * impl-flip; once every caller uses it and {@link #legacyDateGenerator()} is removed at legacy-retirement, this is
+     * the single durable construction point for {@link ScheduledDateGenerator}.
+     */
+    public static ScheduledDateGenerator dateGenerator() {
+        return new ModernScheduledDateGenerator();
+    }
 }
