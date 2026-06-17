@@ -201,7 +201,7 @@ public class StandingInstructionWritePlatformServiceImpl implements StandingInst
             StandingInstructionType instructionType = data.instructionType();
             LocalDate transactionDate = new LocalDate();
             if (recurrenceType.isPeriodicRecurrence()) {
-                final ScheduledDateGenerator scheduledDateGenerator = ScheduledDateGeneratorFactory.legacyDateGenerator();
+                final ScheduledDateGenerator scheduledDateGenerator = ScheduledDateGeneratorFactory.dateGenerator();
                 PeriodFrequencyType frequencyType = data.recurrenceFrequency();
                 LocalDate startDate = data.validFrom();
                 if (frequencyType.isMonthly()) {
