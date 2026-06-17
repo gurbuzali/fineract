@@ -65,7 +65,6 @@ import org.apache.fineract.organisation.office.domain.OfficeRepositoryWrapper;
 import org.apache.fineract.portfolio.account.PortfolioAccountType;
 import org.apache.fineract.portfolio.account.service.AccountTransfersReadPlatformService;
 import org.apache.fineract.portfolio.client.domain.ClientTransaction;
-import org.apache.fineract.portfolio.client.domain.ClientTransactionRepositoryWrapper;
 import org.apache.fineract.portfolio.loanaccount.data.LoanTransactionEnumData;
 import org.apache.fineract.portfolio.loanaccount.domain.LoanTransaction;
 import org.apache.fineract.portfolio.paymentdetail.domain.PaymentDetail;
@@ -91,7 +90,6 @@ public class AccountingProcessorHelper {
     private final GLAccountRepositoryWrapper accountRepositoryWrapper;
     private final OfficeRepositoryWrapper officeRepositoryWrapper;
     private final PortfolioTransactionPort portfolioTransactionPort;
-    private final ClientTransactionRepositoryWrapper clientTransactionRepository;
     private final AccountTransfersReadPlatformService accountTransfersReadPlatformService;
 
     @Autowired
@@ -100,8 +98,7 @@ public class AccountingProcessorHelper {
             final OfficeRepositoryWrapper officeRepositoryWrapper, final PortfolioTransactionPort portfolioTransactionPort,
             final FinancialActivityAccountRepositoryWrapper financialActivityAccountRepository,
             final AccountTransfersReadPlatformService accountTransfersReadPlatformService,
-            final GLAccountRepositoryWrapper accountRepositoryWrapper,
-            final ClientTransactionRepositoryWrapper clientTransactionRepositoryWrapper) {
+            final GLAccountRepositoryWrapper accountRepositoryWrapper) {
         this.glJournalEntryRepository = glJournalEntryRepository;
         this.accountMappingRepository = accountMappingRepository;
         this.closureRepository = closureRepository;
@@ -110,7 +107,6 @@ public class AccountingProcessorHelper {
         this.financialActivityAccountRepository = financialActivityAccountRepository;
         this.accountTransfersReadPlatformService = accountTransfersReadPlatformService;
         this.accountRepositoryWrapper = accountRepositoryWrapper;
-        this.clientTransactionRepository = clientTransactionRepositoryWrapper;
     }
 
     public LoanDTO populateLoanDtoFromMap(final Map<String, Object> accountingBridgeData, final boolean cashBasedAccountingEnabled,
@@ -803,7 +799,7 @@ public class AccountingProcessorHelper {
         final PaymentDetail paymentDetail = null;
         final Long shareTransactionId = null;
 
-        clientTransaction = this.clientTransactionRepository.findOneWithNotFoundDetection(clientId, transactionId);
+        clientTransaction = this.portfolioTransactionPort.findClientTransaction(clientId, transactionId);
 
         String modifiedTransactionId = transactionId.toString();
         modifiedTransactionId = CLIENT_TRANSACTION_IDENTIFIER + transactionId;
@@ -932,7 +928,7 @@ public class AccountingProcessorHelper {
         final PaymentDetail paymentDetail = null;
         final Long shareTransactionId = null;
 
-        clientTransaction = this.clientTransactionRepository.findOneWithNotFoundDetection(clientId, transactionId);
+        clientTransaction = this.portfolioTransactionPort.findClientTransaction(clientId, transactionId);
         String modifiedTransactionId = transactionId.toString();
         modifiedTransactionId = CLIENT_TRANSACTION_IDENTIFIER + transactionId;
 
