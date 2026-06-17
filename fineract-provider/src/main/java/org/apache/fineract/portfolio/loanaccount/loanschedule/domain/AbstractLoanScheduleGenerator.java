@@ -58,7 +58,7 @@ import org.joda.time.LocalDate;
 
 public abstract class AbstractLoanScheduleGenerator implements LoanScheduleGenerator {
 
-    private final ScheduledDateGenerator scheduledDateGenerator = ScheduledDateGeneratorFactory.legacyDateGenerator();
+    private final ScheduledDateGenerator scheduledDateGenerator = ScheduledDateGeneratorFactory.dateGenerator();
     private final PaymentPeriodsInOneYearCalculator paymentPeriodsInOneYearCalculator = new DefaultPaymentPeriodsInOneYearCalculator();
 
     @Override
